@@ -1,0 +1,25 @@
+# RaceIQ pipeline configuration
+# Centralizing hyperparameters here (instead of hardcoding in metrics.py)
+# so runs are reproducible and tunable without touching pipeline code.
+
+skill_model:
+  # Ridge regularization strengths swept via cross-validation (RidgeCV)
+  alphas: [0.01, 0.1, 1.0, 5.0, 10.0, 50.0, 100.0]
+  cv_folds: 5
+
+bootstrap:
+  n_resamples: 500
+  ci_level: 0.90        # 90% confidence interval
+  random_state: 42
+
+clustering:
+  k_min: 2
+  k_max: 6
+  # If true, pick k automatically by max silhouette score instead of a fixed slider value
+  auto_select_k: true
+  random_state: 42
+  n_init: 10
+
+data:
+  outlier_quantile_low: 0.03
+  outlier_quantile_high: 0.97

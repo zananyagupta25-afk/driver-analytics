@@ -1,0 +1,5 @@
+# Extras for local development / the standalone pipeline — NOT needed to run the
+# Streamlit app itself, kept separate so the Cloud deploy stays fast and lean.
+-r requirements.txt
+pytest>=8.0
+mlflow>=2.10
