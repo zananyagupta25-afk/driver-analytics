@@ -38,27 +38,42 @@ def _flatten(html: str) -> str:
 # A generic open-wheel race-car silhouette (no team livery, no real branding) —
 # used once as a large cinematic hero shape, not repeated. Two color-tinted
 # copies are crossfaded via CSS to create the "shifting between two colors" look.
-CAR_SVG = """
-<svg viewBox="0 0 560 200" width="560" height="200" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;height:auto;">
-  <ellipse cx="120" cy="152" rx="30" ry="30" fill="currentColor"/>
-  <ellipse cx="430" cy="152" rx="30" ry="30" fill="currentColor"/>
-  <ellipse cx="120" cy="152" rx="14" ry="14" fill="{bg}" opacity="0.65"/>
-  <ellipse cx="430" cy="152" rx="14" ry="14" fill="{bg}" opacity="0.65"/>
-  <path d="M40 150 L30 148 Q22 147 22 152 Q22 157 30 156 L45 155 Z" fill="currentColor" opacity="0.85"/>
-  <path d="M70 145 Q100 128 150 126 L340 122 Q400 121 430 118
-           Q470 116 500 122 L520 128 Q535 133 535 140
-           L535 148 Q535 154 525 154 L470 154
-           Q462 138 442 138 Q422 138 415 154 L160 154
-           Q152 138 132 138 Q112 138 105 154 L75 154
-           Q66 154 66 148 L66 150 Z" fill="currentColor"/>
-  <path d="M215 122 Q225 96 260 92 L300 92 Q332 94 340 122 Z" fill="currentColor" opacity="0.95"/>
-  <path d="M225 118 Q233 100 260 98 L296 98 Q320 100 328 118 Z" fill="{bg}" opacity="0.75"/>
-  <path d="M480 96 L540 90 L540 100 L490 108 Q470 110 470 118 L470 108 Q472 98 480 96 Z" fill="currentColor"/>
-  <rect x="486" y="108" width="6" height="30" fill="currentColor" opacity="0.9"/>
-  <rect x="524" y="106" width="6" height="30" fill="currentColor" opacity="0.9"/>
-  <path d="M40 150 Q35 130 55 128 L70 128 L70 148 Q60 145 40 150 Z" fill="currentColor" opacity="0.9"/>
-</svg>
-""".replace("{bg}", BG)
+# v3: single-line path data throughout (no embedded newlines/transforms) —
+# wheel spoke lines are pre-computed literal coordinates rather than using
+# transform="rotate(...)", and HTML comments were removed from inside the SVG
+# string, to rule out any markup-parsing edge cases in the rendered page.
+CAR_SVG = ('<svg viewBox="0 0 560 200" width="560" height="200" xmlns="http://www.w3.org/2000/svg" '
+    'style="display:block;width:100%;height:auto;">'
+    '<circle cx="120" cy="152" r="31" fill="currentColor"/>'
+    '<circle cx="120" cy="152" r="14.5" fill="{bg}" opacity="0.7"/>'
+    '<line x1="120" y1="140" x2="120" y2="164" stroke="currentColor" stroke-width="2.4" opacity="0.55"/>'
+    '<line x1="130.4" y1="146" x2="109.6" y2="158" stroke="currentColor" stroke-width="2.4" opacity="0.55"/>'
+    '<line x1="130.4" y1="158" x2="109.6" y2="146" stroke="currentColor" stroke-width="2.4" opacity="0.55"/>'
+    '<circle cx="120" cy="152" r="5" fill="currentColor"/>'
+    '<circle cx="430" cy="152" r="31" fill="currentColor"/>'
+    '<circle cx="430" cy="152" r="14.5" fill="{bg}" opacity="0.7"/>'
+    '<line x1="430" y1="140" x2="430" y2="164" stroke="currentColor" stroke-width="2.4" opacity="0.55"/>'
+    '<line x1="440.4" y1="146" x2="419.6" y2="158" stroke="currentColor" stroke-width="2.4" opacity="0.55"/>'
+    '<line x1="440.4" y1="158" x2="419.6" y2="146" stroke="currentColor" stroke-width="2.4" opacity="0.55"/>'
+    '<circle cx="430" cy="152" r="5" fill="currentColor"/>'
+    '<path d="M40 150 L30 148 Q22 147 22 152 Q22 157 30 156 L45 155 Z" fill="currentColor" opacity="0.85"/>'
+    '<path d="M70 145 Q100 128 150 126 L340 122 Q400 121 430 118 Q470 116 500 122 L520 128 Q535 133 535 140 L535 148 Q535 154 525 154 L470 154 Q462 138 442 138 Q422 138 415 154 L160 154 Q152 138 132 138 Q112 138 105 154 L75 154 Q66 154 66 148 L66 150 Z" fill="currentColor"/>'
+    '<path d="M95 133 Q180 122 300 121 L420 120 Q460 120 495 126" fill="none" stroke="#FFFFFF" stroke-width="2.5" opacity="0.16" stroke-linecap="round"/>'
+    '<path d="M110 141 Q220 132 340 131 L440 130" fill="none" stroke="#FFFFFF" stroke-width="1.4" opacity="0.1" stroke-linecap="round"/>'
+    '<path d="M215 122 Q225 96 260 92 L300 92 Q332 94 340 122 Z" fill="currentColor" opacity="0.95"/>'
+    '<path d="M225 118 Q233 100 260 98 L296 98 Q320 100 328 118 Z" fill="{bg}" opacity="0.75"/>'
+    '<path d="M232 100 Q245 78 270 76 Q292 76 302 96" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" opacity="0.9"/>'
+    '<path d="M232 100 L226 116" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" opacity="0.9"/>'
+    '<path d="M302 96 L306 114" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" opacity="0.9"/>'
+    '<path d="M480 96 L540 90 L540 100 L490 108 Q470 110 470 118 L470 108 Q472 98 480 96 Z" fill="currentColor"/>'
+    '<path d="M486 84 L538 79 L538 87 L490 93 Z" fill="currentColor" opacity="0.85"/>'
+    '<rect x="486" y="108" width="6" height="30" fill="currentColor" opacity="0.9"/>'
+    '<rect x="524" y="106" width="6" height="30" fill="currentColor" opacity="0.9"/>'
+    '<path d="M40 150 Q35 130 55 128 L70 128 L70 148 Q60 145 40 150 Z" fill="currentColor" opacity="0.9"/>'
+    '<path d="M32 146 Q28 133 44 131 L44 138 Q36 140 32 146 Z" fill="currentColor" opacity="0.7"/>'
+    '<path d="M26 143 Q23 135 33 133 L33 139 Q28 140 26 143 Z" fill="currentColor" opacity="0.55"/>'
+    '<ellipse cx="270" cy="176" rx="220" ry="10" fill="#000000" opacity="0.28"/>'
+    '</svg>').replace("{bg}", BG)
 CAR_SVG = _flatten(CAR_SVG)
 
 HERO_CAR_HTML = f"""
@@ -284,6 +299,43 @@ h1, h2, h3 {{
 .tint-a {{ color: #E8394F; animation: car-fade-in 9s infinite; }}
 .tint-b {{ color: #6B5FA8; animation: car-fade-out 9s infinite; }}
 
+/* horizontal motion-blur streaks trailing off the back of the car —
+   pure CSS, gives a sense of speed instead of a static parked silhouette */
+.hero-motion-streaks {{
+    position: absolute;
+    left: 18%;
+    top: 44%;
+    width: 40%;
+    height: 14%;
+    pointer-events: none;
+}}
+.streak {{
+    position: absolute;
+    left: 0;
+    height: 2px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, transparent, rgba(232,57,79,0.55), transparent);
+    animation: streak-move 2.2s linear infinite;
+}}
+.streak:nth-child(1) {{ top: 10%;  width: 70%; animation-delay: 0s;   opacity: 0.7; }}
+.streak:nth-child(2) {{ top: 45%;  width: 55%; animation-delay: 0.5s; opacity: 0.5; }}
+.streak:nth-child(3) {{ top: 78%;  width: 65%; animation-delay: 1.1s; opacity: 0.6; }}
+@keyframes streak-move {{
+    0%   {{ transform: translateX(-30%); opacity: 0; }}
+    15%  {{ opacity: 1; }}
+    85%  {{ opacity: 1; }}
+    100% {{ transform: translateX(220%); opacity: 0; }}
+}}
+
+/* thin gold pinstripe under the hero title — a small premium/racing-livery cue */
+.hero-pinstripe {{
+    width: 46px;
+    height: 3px;
+    background: linear-gradient(90deg, {AMBER}, transparent);
+    border-radius: 2px;
+    margin: 0.55rem 0 0.75rem 0;
+}}
+
 /* mirrored, fading reflection of the car on the "wet floor" below it */
 .hero-car-reflect {{
     position: absolute;
@@ -476,6 +528,11 @@ HERO_BANNER_HTML = _flatten(f"""
     <div class="hero-spotlight"></div>
     <div class="hero-smoke hero-smoke-red"></div>
     <div class="hero-smoke hero-smoke-cool"></div>
+    <div class="hero-motion-streaks">
+        <div class="streak"></div>
+        <div class="streak"></div>
+        <div class="streak"></div>
+    </div>
     <div class="hero-car-reflect">
         <div class="hero-car-b2 tint-a">{CAR_SVG}</div>
         <div class="hero-car-b2 tint-b">{CAR_SVG}</div>
@@ -490,6 +547,7 @@ HERO_BANNER_HTML = _flatten(f"""
     <div class="hero-scrim"></div>
     <div class="hero-text">
         <div class="hero-tag">TELEMETRY-BASED PERFORMANCE MODELING</div>
+        <div class="hero-pinstripe"></div>
         <div class="hero-title">RaceIQ &middot; Driver Consistency Intelligence</div>
         <div class="hero-sub">Quantifying who performs best under pressure, in the wet, and across
         circuit types &mdash; using lap-by-lap timing data, regression-adjusted skill scores, and
